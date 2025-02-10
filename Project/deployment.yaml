@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jupyter-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jupyter
+  template:
+    metadata:
+      labels:
+        app: jupyter
+    spec:
+      containers:
+      - name: jupyter-container
+        image: <dockerhub-username>/jupyter-implementations:latest
+        ports:
+        - containerPort: 8888
+        volumeMounts:
+        - mountPath: /home/jovyan/work
+          name: jupyter-volume
+      volumes:
+      - name: jupyter-volume
+        persistentVolumeClaim:
+          claimName: jupyter-pvc
